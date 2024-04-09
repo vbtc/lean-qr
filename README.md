@@ -1,8 +1,9 @@
 # <img src="https://qr.davidje13.com/resources/logo.svg" alt="Lean QR" />
 
+_Fork of LeanQR, simplified (only canvas, removed extras, removed Preact/React) and adjusted to build for better browser compatibility. Now builds minified CJS that can be included in browsers directly. Builds minified and non-minified versions._
+
 Lean QR is a lightweight yet fully-featured library for generating QR Codes.
-It runs in NodeJS and all recent browsers, and includes wrapper components
-for React and Preact. Under 4kB compressed.
+It runs in NodeJS and most browsers, and includes wrapper components. Under 4kB compressed.
 
 ## Features
 
@@ -16,7 +17,7 @@ for React and Preact. Under 4kB compressed.
 - Automatic encoding to minimise output size;
 - [Fast enough for lag-free live editing](https://qr.davidje13.com/docs/#comparison);
 - Comprehensive automated testing;
-- Multiple output formats ([canvas](https://qr.davidje13.com/docs/#Bitmap2D_toCanvas) / [PNG](https://qr.davidje13.com/docs/#toPngBuffer) / [SVG](https://qr.davidje13.com/docs/#toSvgSource) / [text](https://qr.davidje13.com/docs/#Bitmap2D_toString)).
+
 
 You can [see it in action online](https://qr.davidje13.com/), or try it from the terminal:
 
@@ -26,14 +27,19 @@ npx lean-qr 'MY MESSAGE HERE'
 
 ## Basic Usage
 
-See the [Quickstart](https://qr.davidje13.com/docs/#quickstart) documentation for NodeJS /
-Browser / React / Preact / CLI usage.
+
+
+
+Build, output will be placed in `web/build`
 
 ```shell
-npm install --save lean-qr
+npm install
+npm run build
 ```
 
+Example usage:
 ```html
+<script src='lean-qr-2.3.4.min.js' />
 <canvas id="my-qr-code" />
 
 <style>
@@ -42,13 +48,11 @@ npm install --save lean-qr
   width: 100%;
 }
 </style>
-```
 
-```javascript
-import { generate } from 'lean-qr';
-
+<script>
 const qrCode = generate('LEAN-QR LIBRARY');
 qrCode.toCanvas(document.getElementById('my-qr-code'));
+</script>
 ```
 
 ## Troubleshooting

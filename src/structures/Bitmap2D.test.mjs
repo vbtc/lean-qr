@@ -51,46 +51,6 @@ describe('Bitmap2D', () => {
     expect(bmp2.get(1, 1)).toEqual(false);
   });
 
-  describe('toString', () => {
-    it('stringifies the image', () => {
-      const str = TEST_IMAGE.toString();
-      expect(str).toEqual(
-        [
-          '                      \n',
-          '                      \n',
-          '                      \n',
-          '                      \n',
-          '        ##            \n',
-          '        ##            \n',
-          '        ##  ##        \n',
-          '                      \n',
-          '                      \n',
-          '                      \n',
-          '                      \n',
-        ].join(''),
-      );
-    });
-
-    it('accepts custom settings', () => {
-      const str = TEST_IMAGE.toString({
-        on: '!',
-        off: '_',
-        lf: '\r\n',
-        padX: 2,
-        padY: 1,
-      });
-      expect(str).toEqual(
-        [
-          '_______\r\n',
-          '__!____\r\n',
-          '__!____\r\n',
-          '__!_!__\r\n',
-          '_______\r\n',
-        ].join(''),
-      );
-    });
-  });
-
   describe('toImageData', () => {
     it('creates image data for the image', () => {
       const imageData = TEST_IMAGE.toImageData(VIRTUAL_CANVAS);
@@ -175,68 +135,6 @@ describe('Bitmap2D', () => {
       expect(imageData.data[p + 1]).toEqual(0x00);
       expect(imageData.data[p + 2]).toEqual(0x00);
       expect(imageData.data[p + 3]).toEqual(0xff);
-    });
-  });
-
-  describe('toDataURL', () => {
-    beforeAll(() => {
-      assume(globalThis).hasProperty('document');
-    });
-
-    const loadImage = (src) =>
-      new Promise((resolve) => {
-        const img = new Image();
-        img.addEventListener('load', () => resolve(img), { once: true });
-        img.src = src;
-      });
-
-    const getImageData = (img) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      return ctx.getImageData(0, 0, img.width, img.height);
-    };
-
-    it('returns a data URL for the image content', async () => {
-      const dataUrl = TEST_IMAGE.toDataURL();
-      expect(dataUrl).startsWith('data:image/');
-
-      const img = await loadImage(dataUrl);
-      expect(img.width).toEqual(11);
-      expect(img.height).toEqual(11);
-
-      const imageData = getImageData(img);
-      expect(imageData.data[0]).toEqual(0x00);
-      expect(imageData.data[1]).toEqual(0x00);
-      expect(imageData.data[2]).toEqual(0x00);
-      expect(imageData.data[3]).toEqual(0x00);
-
-      const p = (4 * imageData.width + 4) * 4;
-      expect(imageData.data[p + 0]).toEqual(0x00);
-      expect(imageData.data[p + 1]).toEqual(0x00);
-      expect(imageData.data[p + 2]).toEqual(0x00);
-      expect(imageData.data[p + 3]).toEqual(0xff);
-    });
-
-    it('generates a PNG by default', () => {
-      const dataUrl = TEST_IMAGE.toDataURL();
-      expect(dataUrl).startsWith('data:image/png;base64,');
-    });
-
-    it('scales the image up without blurring', async () => {
-      const dataUrl = TEST_IMAGE.toDataURL({ scale: 10 });
-
-      const img = await loadImage(dataUrl);
-      expect(img.width).toEqual(110);
-      expect(img.height).toEqual(110);
-
-      const imageData = getImageData(img);
-      const p = (40 * imageData.width + 40) * 4 + 3;
-      expect(imageData.data[p - 4]).toEqual(0x00);
-      expect(imageData.data[p + 0]).toEqual(0xff);
-      expect(imageData.data[p + 4]).toEqual(0xff);
     });
   });
 });

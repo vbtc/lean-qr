@@ -14,17 +14,6 @@ export const Bitmap2D = (
     _data[y * size + x] = value;
   },
 
-  toString({ on = '##', off = '  ', lf = '\n', padX = 4, padY = 4 } = {}) {
-    let r = '';
-    for (let y = -padY; y < size + padY; ++y) {
-      for (let x = -padX; x < size + padX; ++x) {
-        r += this.get(x, y) ? on : off;
-      }
-      r += lf;
-    }
-    return r;
-  },
-
   toImageData(
     context,
     { on = [0, 0, 0], off = [0, 0, 0, 0], padX = 4, padY = 4 } = {},
@@ -51,28 +40,5 @@ export const Bitmap2D = (
     canvas.width = data.width;
     canvas.height = data.height;
     ctx.putImageData(data, 0, 0);
-  },
-
-  toDataURL({ type = 'image/png', scale = 1, ...options } = {}) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const data = this.toImageData(ctx, options);
-    canvas.width = data.width * scale;
-    canvas.height = data.height * scale;
-    ctx.putImageData(data, 0, 0);
-    ctx.imageSmoothingEnabled = false;
-    ctx.globalCompositeOperation = 'copy';
-    ctx.drawImage(
-      canvas,
-      0,
-      0,
-      data.width,
-      data.height,
-      0,
-      0,
-      canvas.width,
-      canvas.height,
-    );
-    return canvas.toDataURL(type, 1);
   },
 });

@@ -1,41 +1,36 @@
 import terser from '@rollup/plugin-terser';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import pkg from './package.json' assert { type: 'json' };
 
 const plugins = [
-  nodeResolve(), // for tests
   terser({
-    format: { ascii_only: true },
-    mangle: { properties: { regex: /^_/ } },
+    format: {
+      ascii_only: true,
+    },
+    mangle: {
+      properties: {
+        reserved: ['correction', 'mode', 'generate'],
+      },
+      keep_fnames: true,
+    },
   }),
 ];
 
-const target = (path) => ({
-  input: `src/${path}.mjs`,
-  output: [
-    { file: `build/${path}.mjs`, format: 'esm' },
-    { file: `build/${path}.js`, format: 'cjs' },
-  ],
-  plugins,
-});
-
 export default [
-  target('index'),
-  target('extras/svg'),
-  target('extras/node_export'),
-  target('extras/react'),
-  target('extras/errors'),
   {
-    input: 'bin/cli.mjs',
-    output: {
-      file: 'build/cli.mjs',
-      format: 'esm',
-    },
-    external: [/\/build\//],
-    plugins,
-  },
-  {
-    input: 'web/index.mjs',
-    output: { file: 'web/build/index.min.mjs', format: 'esm' },
-    plugins,
+    treeshake: true,
+    input: 'src/index.mjs',
+    output: [
+      {
+        file: `web/build/${pkg.name}-${pkg.version}.js`,
+        format: 'cjs',
+        interop: 'compat',
+      },
+      {
+        file: `web/build/${pkg.name}-${pkg.version}.min.js`,
+        format: 'cjs',
+        interop: 'compat',
+        plugins,
+      },
+    ],
   },
 ];

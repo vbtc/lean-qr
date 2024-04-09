@@ -3,36 +3,12 @@
   "version": "2.3.4",
   "description": "minimal QR code generation",
   "files": [
-    "build/**/*",
-    "index.d.ts"
+    "build/**/*"
   ],
   "bin": "./build/cli.mjs",
   "main": "build/index.js",
-  "types": "index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./build/index.js",
-      "import": "./build/index.mjs",
-      "types": "./index.d.ts"
-    },
-    "./extras/svg": {
-      "require": "./build/extras/svg.js",
-      "import": "./build/extras/svg.mjs",
-      "types": "./index.d.ts"
-    },
-    "./extras/node_export": {
-      "require": "./build/extras/node_export.js",
-      "import": "./build/extras/node_export.mjs",
-      "types": "./index.d.ts"
-    },
-    "./extras/react": {
-      "require": "./build/extras/react.js",
-      "import": "./build/extras/react.mjs",
-      "types": "./index.d.ts"
-    }
-  },
   "scripts": {
-    "build": "rollup --config rollup.config.mjs && chmod +x build/cli.mjs",
+    "build": "rollup --config rollup.config.mjs",
     "format": "prettier --write .",
     "start": "cd web && static-server --index index.html --port 8080",
     "test": "lean-test --target=node,chrome,firefox -x '**/*.node.*' -x '**/*.browser.*' && lean-test -i '**/*.node.test.*' && lean-test --target=chrome,firefox --preprocess=rollup -i '**/*.browser.test.*' && ./test-package/run.sh && prettier --check ."
@@ -44,9 +20,7 @@
   "keywords": [
     "qr",
     "qr-code",
-    "barcode",
-    "react",
-    "preact"
+    "barcode"
   ],
   "author": "David Evans",
   "license": "MIT",
@@ -57,11 +31,9 @@
   "devDependencies": {
     "lean-test": "2.x",
     "pngjs": "7.x",
-    "preact": "10.x",
     "prettier": "3.2.5",
     "rollup": "4.x",
-    "@rollup/plugin-node-resolve": "15.x",
     "@rollup/plugin-terser": "0.4.x",
-    "static-server": "2.x"
+    "static-server": "3.0.0"
   }
 }
